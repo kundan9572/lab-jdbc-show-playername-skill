@@ -17,30 +17,32 @@ public class PlayerDAO {
 		
 		List<Player> playerList = new ArrayList<Player>();
 		
-		Player player= null;
+		
 		
 		ConnectionManager con =new ConnectionManager();
 		
 		Statement st= con.getConnection().createStatement();
 		
-		String sql=" SELECT * FROM PLAYER";
-		ResultSet rs = st.executeQuery(sql);
+		String sql=" SELECT * FROM PLAYER ORDER BY NAME";
+		ResultSet resultSet = st.executeQuery(sql);
 		
-		while(rs.next())
+		Skill skill = null;
+		SkillDAO skilldao = new SkillDAO();
+		
+		while(resultSet.next())
 		{
-			player= new Player();
-			Long pid= rs.getLong("ID");
-			player.setPlayerId(pid);
-			String name =rs.getString("NAME");
-			player.setName(name);
-			String country = rs.getString("COUNTRY");
-			player.setCountry(country);
-			Long skillid = rs.getLong("SKILLID");
-			player.setSkill(skillid);
-			playerlist.add(player);
+		
+			long playerId = resultSet.getLong(1);
+			String playerName = resultSet.getString(2);
+			String playerCountry = resultSet.getString(3);
+			skill = skilldao.getSkillID(resultSet.getLong(4));
+			Player player = new Player(playerId, playerName, playerCountry, skill);
+			playerList.add(player);
+
 		}
+		
+		return playerList;
+
 	}
-	
-	return playerlist;
 	
 }

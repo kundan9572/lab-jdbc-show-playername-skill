@@ -15,33 +15,29 @@ public class SkillDAO{
 	
 	public Skill getSkillID(Long ID) throws ClassNotFoundException, SQLException, IOException {
 		
-		
-		
-		
-		List<Skill> skillList = new ArrayList<Skill>();
-		
-		Skill skill= null;
+	
 		
 		ConnectionManager con =new ConnectionManager();
 		
 		Statement st= con.getConnection().createStatement();
 		
-		String sql=" SELECT * FROM SKILL";
+		String sql=" SELECT * FROM SKILL WHERE ID =" +ID;;
 		ResultSet rs = st.executeQuery(sql);
 		
-		
+		Skill skill = null;
 		
 		while(rs.next())
 		{
-			skill = new Skill();
-			Long skillid = rs.getLong("SKILLID");
-			skill.setSkillId(skillid);
-			String name = rs.getString("NAME");
-			skill.setSkillName(name);
-			skillList.add(skill);
+
+			if(rs.getLong("ID") == ID)
+			{
+				skill = new Skill(rs.getLong("ID"), rs.getString("NAME"));
+			}
+			
+			
 		}
 		
-		
+		return skill;
 	}
 
 }
